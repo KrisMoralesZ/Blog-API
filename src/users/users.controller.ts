@@ -1,5 +1,13 @@
 import { UsersService } from './users.service';
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import { CreateUserDto } from './dto/users.dto';
 
@@ -28,5 +36,11 @@ export class UsersController {
     @Body() body: Partial<CreateUserDto>,
   ): User | undefined {
     return this.usersService.updateUser(id, body);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param('id') id: number): { deleted: boolean } {
+    const deleted = this.usersService.deleteUser(id);
+    return { deleted };
   }
 }
