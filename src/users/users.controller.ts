@@ -1,5 +1,5 @@
 import { UsersService } from './users.service';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { User } from 'src/models/user.model';
 import { CreateUserDto } from './dto/users.dto';
 
@@ -20,5 +20,13 @@ export class UsersController {
   @Post()
   createUser(@Body() body: CreateUserDto) {
     return this.usersService.createUser(body);
+  }
+
+  @Put(':id')
+  updateUser(
+    @Param('id') id: number,
+    @Body() body: Partial<CreateUserDto>,
+  ): User | undefined {
+    return this.usersService.updateUser(id, body);
   }
 }

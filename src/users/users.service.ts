@@ -27,4 +27,13 @@ export class UsersService {
     this.users.push(newUser);
     return newUser;
   }
+
+  updateUser(id: number, body: Partial<CreateUserDto>): User | undefined {
+    const user = this.getUserById(id);
+    if (user) {
+      user.name = body.name ?? user.name;
+      user.email = body.email ?? user.email;
+    }
+    return user;
+  }
 }
