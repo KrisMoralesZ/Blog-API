@@ -20,27 +20,27 @@ describe('UsersController', () => {
 
   it('should return an array of users', async () => {
     const result = [{ id: 1, name: 'John Doe' }];
-    jest
-      .spyOn(controller as any, 'getUsers')
-      .mockImplementation(async () => result);
-    expect(await controller.getUsers()).toBe(result);
+
+    jest.spyOn(controller as any, 'getUsers').mockResolvedValue(result);
+
+    await expect(controller.getUsers()).resolves.toBe(result);
   });
 
   it('should create a user', async () => {
     const dto = { name: 'Jane Doe', email: 'jane@example.com' };
     const result = { id: 2, ...dto };
-    jest
-      .spyOn(controller as any, 'createUser')
-      .mockImplementation(async () => result);
-    expect(await controller.createUser(dto)).toBe(result);
+
+    jest.spyOn(controller as any, 'createUser').mockResolvedValue(result);
+
+    await expect(controller.createUser(dto)).resolves.toBe(result);
   });
 
-  it('should delete a user', async () => {
+  it('should delete a user', () => {
     const userId = 1;
     const result = { deleted: true };
-    jest
-      .spyOn(controller as any, 'deleteUser')
-      .mockImplementation(() => result);
+
+    jest.spyOn(controller as any, 'deleteUser').mockReturnValue(result);
+
     expect(controller.deleteUser(userId)).toBe(result);
   });
 });
