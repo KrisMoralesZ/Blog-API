@@ -8,20 +8,20 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { User } from 'src/models/user.model';
-import { CreateUserDto } from './dto/users.dto';
+import { IUser } from 'src/models/user.model';
+import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  getUsers(): User[] {
+  getUsers() {
     return this.usersService.getAllUsers();
   }
 
   @Get(':id')
-  findUser(@Param('id') id: number): User | undefined {
+  findUser(@Param('id') id: number) {
     return this.usersService.getUserById(id);
   }
 
@@ -31,16 +31,12 @@ export class UsersController {
   }
 
   @Put(':id')
-  updateUser(
-    @Param('id') id: number,
-    @Body() body: Partial<CreateUserDto>,
-  ): User | undefined {
+  UpdateUserDto(@Param('id') id: number, @Body() body: Partial<UpdateUserDto>) {
     return this.usersService.updateUser(id, body);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: number): { deleted: boolean } {
-    const deleted = this.usersService.deleteUser(id);
-    return { deleted };
+  deleteUser(@Param('id') id: number) {
+    return this.usersService.deleteUser(id);
   }
 }
