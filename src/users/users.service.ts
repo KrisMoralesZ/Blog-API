@@ -1,48 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/models/user.model';
-import { CreateUserDto } from './dto/users.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [
-    { id: 1, name: 'Alice', email: 'alice@example.com' },
-    { id: 2, name: 'Bob', email: 'bob@example.com' },
-    { id: 3, name: 'Charlie', email: 'charlie@example.com' },
-  ];
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
 
-  getAllUsers(): User[] {
-    return this.users;
+  async getAllUsers() {
+    const users = await this.usersRepository.find();
+    return users;
   }
 
-  getUserById(id: number): User | undefined {
-    return this.users.find((user) => user.id === id);
-  }
-
-  createUser(body: CreateUserDto): User {
-    const newUser: User = {
-      id: this.users.length + 1,
-      name: body.name,
-      email: body.email,
-    };
-    this.users.push(newUser);
-    return newUser;
-  }
-
-  updateUser(id: number, body: Partial<CreateUserDto>): User | undefined {
-    const user = this.getUserById(id);
-    if (user) {
-      user.name = body.name ?? user.name;
-      user.email = body.email ?? user.email;
-    }
+  async getUserById(id: number) {
+    const user = await this.usersRepository.findOneBy({ id });
     return user;
   }
 
-  deleteUser(id: number): boolean {
-    const index = this.users.findIndex((user) => user.id === id);
-    if (index !== -1) {
-      this.users.splice(index, 1);
-      return true;
-    }
-    return false;
+  async createUser(body: CreateUserDto) {
+    const newUser = this.usersRepository.create(body);
+    return await this.usersRepository.save(newUser);
+  }
+
+  async updateUser(id: number, body: Partial<UpdateUserDto>) {
+    await this.usersRepository.update(id, body);
+    return this.getUserById(id);
+  }
+
+  async deleteUser(id: number) {
+    const result = await this.usersRepository.delete(id);
+    return (result.affected ?? 0) > 0;
   }
 }
