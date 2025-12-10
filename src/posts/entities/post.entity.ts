@@ -42,4 +42,8 @@ export class Post {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.posts, { nullable: false })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

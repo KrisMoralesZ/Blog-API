@@ -24,7 +24,7 @@ export class PostsService {
 
   async findAll() {
     const posts = await this.postsRepository.find({
-      relations: ['user'],
+      relations: ['user.profile'],
     });
     return posts;
   }
@@ -32,7 +32,7 @@ export class PostsService {
   async findOne(id: number) {
     const post = await this.postsRepository.findOne({
       where: { id },
-      relations: ['user'],
+      relations: ['user.profile'],
     });
 
     if (!post) {
