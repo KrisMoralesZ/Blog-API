@@ -2,9 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Post } from 'src/posts/entities/post.entity';
+import { Profile } from './profile.entity';
 
 @Entity({
   name: 'users',
@@ -33,4 +38,11 @@ export class User {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @OneToOne(() => Profile, { nullable: false, cascade: true })
+  @JoinColumn({ name: 'profile_id' })
+  profile: Profile;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }
