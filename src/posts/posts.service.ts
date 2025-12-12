@@ -17,8 +17,11 @@ export class PostsService {
       const newPost = this.postsRepository.create(body);
       await this.postsRepository.save(newPost);
       return newPost;
-    } catch (error) {
-      throw new Error('Error creating post: ' + error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error('Error creating post: ' + error.message);
+      }
+      throw new Error('Error creating post: Unknown error');
     }
   }
 
@@ -49,8 +52,11 @@ export class PostsService {
         throw new NotFoundException(`Post with ID ${id} not found`);
       }
       return this.postsRepository.update(id, updates);
-    } catch (error) {
-      throw new Error('Error updating post: ' + error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error('Error updating post: ' + error.message);
+      }
+      throw new Error('Error updating post: Unknown error');
     }
   }
 
@@ -62,8 +68,11 @@ export class PostsService {
       }
       await this.postsRepository.remove(post);
       return { message: `Post with ID ${id} has been removed` };
-    } catch (error) {
-      throw new Error('Error removing post: ' + error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error('Error removing post: ' + error.message);
+      }
+      throw new Error('Error removing post: Unknown error');
     }
   }
 }
