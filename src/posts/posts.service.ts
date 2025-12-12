@@ -12,7 +12,7 @@ export class PostsService {
     private postsRepository: Repository<Post>,
   ) {}
 
-  async create(body: CreatePostDto) {
+  async createPost(body: CreatePostDto) {
     try {
       const newPost = this.postsRepository.create(body);
       await this.postsRepository.save(newPost);
@@ -25,14 +25,12 @@ export class PostsService {
     }
   }
 
-  async findAll() {
-    const posts = await this.postsRepository.find({
-      relations: ['user'],
-    });
+  async getAllPosts() {
+    const posts = await this.postsRepository.find();
     return posts;
   }
 
-  async findOne(id: number) {
+  async getPostById(id: number) {
     const post = await this.postsRepository.findOne({
       where: { id },
       relations: ['user'],
@@ -45,7 +43,7 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, updates: UpdatePostDto) {
+  async updatePost(id: number, updates: UpdatePostDto) {
     try {
       const post = await this.postsRepository.findOne({ where: { id } });
       if (!post) {
@@ -60,19 +58,11 @@ export class PostsService {
     }
   }
 
-  async remove(id: number) {
-    try {
-      const post = await this.postsRepository.findOne({ where: { id } });
-      if (!post) {
-        throw new NotFoundException(`Post with ID ${id} not found`);
-      }
-      await this.postsRepository.remove(post);
-      return { message: `Post with ID ${id} has been removed` };
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error('Error removing post: ' + error.message);
-      }
-      throw new Error('Error removing post: Unknown error');
+  async deletePost(id: number) {
+    const result = await this.postsRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Post with ID ${id} not found`);
     }
+    return result;
   }
 }

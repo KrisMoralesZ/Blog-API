@@ -11,6 +11,7 @@ describe('PostsService', () => {
     delete: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
+    remove: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -28,10 +29,32 @@ describe('PostsService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return an array of posts', async () => {
-    const posts = [{ id: 1, title: 'Test Post' }];
+  it('should return an array with all of the posts', async () => {
+    const posts = [];
     mockService.find.mockResolvedValue(posts);
 
-    expect(await service.findAll()).toEqual(posts);
+    expect(await service.getAllPosts()).toEqual(posts);
+  });
+
+  it('should return a single post', async () => {
+    const post = { id: 1, title: 'Test Post' };
+    mockService.findOne.mockResolvedValue(post);
+
+    expect(await service.getPostById(1)).toEqual(post);
+  });
+
+  it('should create a post', async () => {
+    const post = { title: 'New Post', content: 'Content', userId: 1 };
+    mockService.create.mockReturnValue(post);
+    mockService.save.mockResolvedValue(post);
+
+    expect(await service.createPost(post)).toEqual(post);
+  });
+
+  it('should update a post', async () => {
+    const updates = { title: 'Updated Post' };
+    mockService.update.mockResolvedValue({ affected: 1 });
+
+    expect(await service.updatePost(1, updates)).toEqual({ affected: 1 });
   });
 });
