@@ -5,10 +5,22 @@ import { PostsService } from './posts.service';
 describe('PostsController', () => {
   let controller: PostsController;
 
+  const mockService = {
+    find: jest.fn(),
+    findOne: jest.fn(),
+    save: jest.fn(),
+    delete: jest.fn(),
+    create: jest.fn(),
+    update: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PostsController],
-      providers: [PostsService],
+      providers: [
+        PostsService,
+        { provide: 'PostRepository', useValue: mockService },
+      ],
     }).compile();
 
     controller = module.get<PostsController>(PostsController);
