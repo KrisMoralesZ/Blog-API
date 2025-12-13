@@ -4,28 +4,42 @@ import { UsersService } from './users.service';
 describe('UsersService', () => {
   let service: UsersService;
 
+  const mockRepository = {
+    find: jest.fn(),
+    findOne: jest.fn(),
+    save: jest.fn(),
+    delete: jest.fn(),
+    create: jest.fn(),
+    update: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
+      providers: [
+        UsersService,
+        { provide: 'UserRepository', useValue: mockRepository },
+      ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
   });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return an array of users', () => {
-    expect(service.getAllUsers()).toEqual([
-      { id: 1, name: 'Alice', email: 'alice@example.com' },
-      { id: 2, name: 'Bob', email: 'bob@example.com' },
-      { id: 3, name: 'Charlie', email: 'charlie@example.com' },
-    ]);
+  it('should return an array of users', async () => {
+    const users = [{ id: 1, name: 'Test' }];
+    mockRepository.find.mockResolvedValue(users);
+
+    expect(await service.getAllUsers()).toEqual(users);
   });
 
-  it('should create a user', () => {
-    const dto = { name: 'Test User', email: 'test@example.com' };
-    const result = { id: 4, ...dto };
-    expect(service.createUser(dto)).toEqual(result);
+  it('should create a user', async () => {
+    const data = { name: 'New User', email: 'newuser@example.com' };
+
+    mockRepository.save.mockResolvedValue({ id: 1, ...data });
+
+    expect(await service.createUser(data)).toEqual({ id: 1, ...data });
   });
 });
