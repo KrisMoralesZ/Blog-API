@@ -5,8 +5,9 @@ import { PostsService } from '@posts/services/posts.service';
 import { PostsController } from '@posts/controllers/posts.controller';
 import { Post } from '@posts/entities/post.entity';
 import { CategoriesController } from './controllers/categories/categories.controller';
+import { Category } from './entities/category.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([Post])],
+  imports: [TypeOrmModule.forFeature([Post, Category])],
   controllers: [PostsController, CategoriesController],
   providers: [PostsService, CategoriesService],
 })
