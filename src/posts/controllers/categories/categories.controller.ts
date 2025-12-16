@@ -10,10 +10,14 @@ import {
 import { CreateCategoryDto } from '@posts/dto/create-category.dto';
 import { UpdateCategoryDto } from '@posts/dto/update-category.dto';
 import { CategoriesService } from '@posts/services/categories/categories.service';
+import { PostsService } from '@posts/services/posts.service';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(
+    private readonly categoriesService: CategoriesService,
+    private readonly postService: PostsService,
+  ) {}
 
   @Post()
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
@@ -28,6 +32,11 @@ export class CategoriesController {
   @Get(':id')
   getCategoryById(@Param('id') id: number) {
     return this.categoriesService.getCategoryById(id);
+  }
+
+  @Get(':id/posts')
+  getPostsByCategory(@Param('id') id: number) {
+    return this.postService.getPostsByCategory(id);
   }
 
   @Put(':id')
