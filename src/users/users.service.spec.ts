@@ -36,7 +36,11 @@ describe('UsersService', () => {
   });
 
   it('should create a user', async () => {
-    const data = { name: 'New User', email: 'newuser@example.com' };
+    const data = {
+      email: 'newuser@example.com',
+      password: 'password123',
+      profile: { name: 'New User', lastName: 'User', avatar: 'avatar.jpg' },
+    };
 
     mockRepository.save.mockResolvedValue({ id: 1, ...data });
 
