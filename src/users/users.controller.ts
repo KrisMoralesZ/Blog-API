@@ -23,6 +23,16 @@ export class UsersController {
     return this.usersService.getUserById(id);
   }
 
+  @Get(':id/profile')
+  getUserProfile(@Param('id') id: number) {
+    return this.usersService.getUserById(id);
+  }
+
+  @Get(':id/posts')
+  getUserPosts(@Param('id') id: number) {
+    return this.usersService.getUserPosts(id);
+  }
+
   @Post()
   createUser(@Body() body: CreateUserDto) {
     return this.usersService.createUser(body);

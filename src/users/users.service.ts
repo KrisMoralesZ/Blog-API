@@ -21,8 +21,33 @@ export class UsersService {
     return user;
   }
 
+  async getUserProfile(id: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['profile'],
+    });
+    return user?.profile;
+  }
+
+  async getUserPosts(id: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['posts'],
+    });
+    return user?.posts;
+  }
+
   async createUser(body: CreateUserDto) {
-    const newUser = this.usersRepository.create(body);
+    const newUser = this.usersRepository.create({
+      email: body.email,
+      password: body.password,
+      profile: {
+        name: body.profile.name,
+        lastName: body.profile.lastName,
+        avatar: body.profile.avatar,
+      },
+    });
+
     return await this.usersRepository.save(newUser);
   }
 
