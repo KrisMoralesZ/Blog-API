@@ -5,7 +5,7 @@ import type { Request } from 'express';
 export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Req() req: Request) {
+  login(@Req() req: Request) {
     return req.user;
   }
 }
