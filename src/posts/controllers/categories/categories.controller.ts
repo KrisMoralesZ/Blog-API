@@ -35,8 +35,8 @@ export class CategoriesController {
   }
 
   @Get(':id/posts')
-  getPostsByCategory(@Param('id') id: number) {
-    return this.postService.getPostsByCategory(id);
+  getPostsByCategoryId(@Param('id') id: number) {
+    return this.postService.getPostsByCategoryId(id);
   }
 
   @Put(':id')

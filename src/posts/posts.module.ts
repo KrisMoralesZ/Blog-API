@@ -7,7 +7,10 @@ import { Post } from '@posts/entities/post.entity';
 import { CategoriesController } from './controllers/categories/categories.controller';
 import { Category } from './entities/category.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Category])],
+  imports: [
+    TypeOrmModule.forFeature([Post]),
+    TypeOrmModule.forFeature([Category]),
+  ],
   controllers: [PostsController, CategoriesController],
   providers: [PostsService, CategoriesService],
 })
