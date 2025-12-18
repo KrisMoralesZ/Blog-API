@@ -38,7 +38,16 @@ export class UsersService {
   }
 
   async createUser(body: CreateUserDto) {
-    const newUser = this.usersRepository.create(body);
+    const newUser = this.usersRepository.create({
+      email: body.email,
+      password: body.password,
+      profile: {
+        name: body.profile.name,
+        lastName: body.profile.lastName,
+        avatar: body.profile.avatar,
+      },
+    });
+
     return await this.usersRepository.save(newUser);
   }
 

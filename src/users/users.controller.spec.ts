@@ -39,7 +39,11 @@ describe('UsersController', () => {
   });
 
   it('should create a user', async () => {
-    const dto = { name: 'Jane Doe', email: 'jane@example.com' };
+    const dto = {
+      email: 'jane@example.com',
+      password: 'password123',
+      profile: { name: 'Jane Doe', lastName: 'Doe', avatar: 'avatar.jpg' },
+    };
     const result = { id: 2, ...dto };
 
     jest.spyOn(controller as any, 'createUser').mockResolvedValue(result);

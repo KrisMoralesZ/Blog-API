@@ -43,12 +43,11 @@ export class PostsService {
     return post;
   }
 
-  async getPostsByCategory(categoryId: number) {
-    const posts = await this.postsRepository
-      .createQueryBuilder('post')
-      .leftJoinAndSelect('post.categories', 'category')
-      .where('category.id = :categoryId', { categoryId })
-      .getMany();
+  async getPostsByCategoryId(categoryId: number) {
+    const posts = await this.postsRepository.find({
+      where: { categories: { id: categoryId } },
+      relations: ['categories', 'user.profile'],
+    });
     return posts;
   }
 
