@@ -43,6 +43,14 @@ export class PostsService {
     return post;
   }
 
+  async getPostsByCategoryId(categoryId: number) {
+    const posts = await this.postsRepository.find({
+      where: { categories: { id: categoryId } },
+      relations: ['categories', 'user.profile'],
+    });
+    return posts;
+  }
+
   async updatePost(id: number, updates: UpdatePostDto) {
     try {
       const post = await this.postsRepository.findOne({ where: { id } });
