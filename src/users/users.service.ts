@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from '@users/entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '@users/dto/users.dto';
 
@@ -32,6 +33,10 @@ export class UsersService {
   async getUserByEmail(email: string) {
     const user = await this.usersRepository.findOneBy({ email });
     return user;
+  }
+
+  async comparePassword(password: string, hashedPassword: string) {
+    await bcrypt.compare(password, hashedPassword);
   }
 
   async getUserPosts(id: number) {
