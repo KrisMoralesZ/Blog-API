@@ -7,6 +7,7 @@ describe('UsersService', () => {
   const mockRepository = {
     find: jest.fn(),
     findOne: jest.fn(),
+    findOneBy: jest.fn(),
     save: jest.fn(),
     delete: jest.fn(),
     create: jest.fn(),
@@ -33,6 +34,13 @@ describe('UsersService', () => {
     mockRepository.find.mockResolvedValue(users);
 
     expect(await service.getAllUsers()).toEqual(users);
+  });
+
+  it('should return a user by id', async () => {
+    const user = { id: 1, name: 'Test' };
+    mockRepository.findOneBy.mockResolvedValue(user);
+
+    expect(await service.getUserById(1)).toEqual(user);
   });
 
   it('should create a user', async () => {

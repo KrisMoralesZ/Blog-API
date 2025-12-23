@@ -38,6 +38,14 @@ describe('UsersController', () => {
     await expect(controller.getUsers()).resolves.toBe(result);
   });
 
+  it('should return a user by id', async () => {
+    const result = { id: 1, name: 'John Doe' };
+
+    jest.spyOn(controller as any, 'getUserById').mockResolvedValue(result);
+
+    await expect(controller.getUserById(1)).resolves.toBe(result);
+  });
+
   it('should create a user', async () => {
     const dto = {
       email: 'jane@example.com',
